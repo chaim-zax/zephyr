@@ -31,16 +31,25 @@ struct ws2812_gpio_cfg {
 };
 
 /*
- * This is hard-coded to nRF51 in two ways:
+ * This is hard-coded to nRF51 and nRF52 in two ways:
  *
  * 1. The assembly delays T1H, T0H, TxL
  * 2. GPIO set/clear
  */
 
 /*
+ * For the nRF51:
  * T1H: 1 bit high pulse delay: 12 cycles == .75 usec
  * T0H: 0 bit high pulse delay: 4 cycles == .25 usec
  * TxL: inter-bit low pulse delay: 8 cycles == .5 usec
+ * For the nRF52:
+ * T1H: 1 bit high pulse delay: 47 cycles == .75 usec
+ * T0H: 0 bit high pulse delay: 15 cycles == .25 usec
+ * T1L: inter-bit low pulse delay: 24 cycles == .5 usec
+ * T0L: inter-bit low pulse delay: 22 cycles == .5 usec
+ *
+ * These timings seem to differ comparing the datasheets of the various ws2812
+ * variants, we keep the same timings as noted for the once defined with nRF51.
  *
  * We can't use k_busy_wait() here: its argument is in microseconds,
  * and we need roughly .05 microsecond resolution.
@@ -48,7 +57,8 @@ struct ws2812_gpio_cfg {
 #ifdef CONFIG_SOC_SERIES_NRF51X
 #define DELAY_T1H "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 #define DELAY_T0H "nop\nnop\nnop\nnop\n"
-#define DELAY_TxL "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+#define DELAY_T1L "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+#define DELAY_T0L DELAY_T1L
 
 #elif defined(CONFIG_SOC_SERIES_NRF52X)
 #define DELAY_T1H \
@@ -59,15 +69,10 @@ struct ws2812_gpio_cfg {
 #define DELAY_T0H \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
 	"nop\n"
-#define DELAY_TxL \
+#define DELAY_T1L \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+#define DELAY_T0L \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
@@ -98,7 +103,7 @@ struct ws2812_gpio_cfg {
 	__asm volatile (SET_HIGH			\
 			DELAY_T1H			\
 			SET_LOW			\
-			DELAY_TxL			\
+			DELAY_T1L			\
 			::				\
 			[r] "l" (base),		\
 			[p] "l" (pin)); } while (false)
@@ -108,7 +113,7 @@ struct ws2812_gpio_cfg {
 	__asm volatile (SET_HIGH			\
 			DELAY_T0H			\
 			SET_LOW			\
-			DELAY_TxL			\
+			DELAY_T0L			\
 			::				\
 			[r] "l" (base),		\
 			[p] "l" (pin)); } while (false)
