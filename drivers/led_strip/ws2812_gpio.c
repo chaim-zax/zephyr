@@ -45,9 +45,35 @@ struct ws2812_gpio_cfg {
  * We can't use k_busy_wait() here: its argument is in microseconds,
  * and we need roughly .05 microsecond resolution.
  */
+#ifdef CONFIG_SOC_SERIES_NRF51X
 #define DELAY_T1H "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 #define DELAY_T0H "nop\nnop\nnop\nnop\n"
 #define DELAY_TxL "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+
+#elif defined(CONFIG_SOC_SERIES_NRF52X)
+#define DELAY_T1H \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\n"
+#define DELAY_T0H \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\n"
+#define DELAY_TxL \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
+
+#else
+#error The ws2812 gpio driver is not supported for this soc
+#endif
 
 /*
  * GPIO set/clear (these make assumptions about assembly details

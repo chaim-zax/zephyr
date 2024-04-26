@@ -30,11 +30,11 @@ config WS2812_STRIP_I2S
 
 config WS2812_STRIP_GPIO
 	bool "WS2812 LED strip GPIO driver"
-	# Only an Cortex-M0 inline assembly implementation for the nRF51
-	# is supported currently.
+	# Only an Cortex-M0/M4 inline assembly implementation for the nRF51 and
+	# nRF52 is supported currently.
 	default y
 	depends on DT_HAS_WORLDSEMI_WS2812_GPIO_ENABLED
-	depends on SOC_SERIES_NRF51X
+	depends on (SOC_SERIES_NRF51X || SOC_SERIES_NRF52X)
 	select LED_STRIP_RGB_SCRATCH
 	help
 	  Enable driver for WS2812 (and compatibles) LED strip directly controlling with GPIO.
