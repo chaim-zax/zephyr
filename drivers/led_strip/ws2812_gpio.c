@@ -61,19 +61,19 @@ struct ws2812_gpio_cfg {
 #define DELAY_T0L DELAY_T1L
 
 #elif defined(CONFIG_SOC_SERIES_NRF52X)
-#define DELAY_T1H \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+#define DELAY_T1H                                                                                  \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
 	"nop\nnop\nnop\nnop\nnop\n"
-#define DELAY_T0H \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+#define DELAY_T0H                                                                                  \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
 	"nop\n"
-#define DELAY_T1L \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+#define DELAY_T1L                                                                                  \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
-#define DELAY_T0L \
-	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n" \
+#define DELAY_T0L                                                                                  \
+	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"                   \
 	"nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
 #else
